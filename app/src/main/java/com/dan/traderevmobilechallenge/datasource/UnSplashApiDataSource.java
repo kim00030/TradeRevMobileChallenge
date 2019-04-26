@@ -20,6 +20,6 @@ public class UnSplashApiDataSource {
     private UnSplashApiDataSource() { }
 
     public Observable<List<Photo>> getAllPhotos(final String clientId){
-        return RetrofitClient.getInstance().getServiceApi().getAllPhotos(clientId);
+        return RetrofitClient.getInstance().getServiceApi().getAllPhotos(clientId,3,30);
     }
 }

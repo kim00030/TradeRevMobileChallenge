@@ -14,6 +14,9 @@ import retrofit2.http.Query;
 public interface ServiceApi {
 
     @GET("photos")
-    Observable<List<Photo>> getAllPhotos(@Query("client_id") String clientId);
+    Observable<List<Photo>> getAllPhotos(
+            @Query("client_id") String clientId,
+            @Query("page") int page,
+            @Query("per_page") int perPage);
 
 }

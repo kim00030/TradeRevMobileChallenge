@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TradeRev Mobile Challenge</string>
+    <string name="photoimage">photoImage</string>
 </resources>

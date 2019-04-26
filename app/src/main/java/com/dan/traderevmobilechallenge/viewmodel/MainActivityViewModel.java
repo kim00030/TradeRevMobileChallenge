@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 
 import com.dan.traderevmobilechallenge.model.Photo;
 import com.dan.traderevmobilechallenge.repository.RemoteRepository;
@@ -12,7 +13,6 @@ import com.dan.traderevmobilechallenge.repository.RemoteRepository;
 import java.util.List;
 
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -24,8 +24,9 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivityViewModel extends AndroidViewModel {
 
     private static final String TAG = "myDebug";
-    private RemoteRepository remoteRepository;
+    private final RemoteRepository remoteRepository;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final MutableLiveData<List<Photo>> photosLiveData = new MutableLiveData<>();
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -50,6 +51,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                     @Override
                     public void onNext(List<Photo> photos) {
                         Log.d(TAG, "onNext: ");
+                        photosLiveData.setValue(photos);
                     }
 
                     @Override
@@ -62,6 +64,10 @@ public class MainActivityViewModel extends AndroidViewModel {
                         Log.d(TAG, "onComplete: ");
                     }
                 });
+    }
+
+    public MutableLiveData<List<Photo>> getPhotosLiveData() {
+        return photosLiveData;
     }
 
     @Override

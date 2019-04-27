@@ -25,8 +25,9 @@ public class SlideShowActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_slide_show);
+
         activitySlideShowBinding = DataBindingUtil.setContentView(this, R.layout.activity_slide_show);
+
         selectedPosition = getIntent().getIntExtra(Constants.KEY_CURRENT_POSITION, 0);
         photos = getIntent().getParcelableArrayListExtra(Constants.KEY_PHOTOS);
         customSwipeAdapter = new CustomSwipeAdapter(this, photos);

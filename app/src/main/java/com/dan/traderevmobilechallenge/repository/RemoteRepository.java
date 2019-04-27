@@ -4,6 +4,7 @@ import com.dan.traderevmobilechallenge.BuildConfig;
 import com.dan.traderevmobilechallenge.datasource.UnSplashApiDataSource;
 import com.dan.traderevmobilechallenge.model.Photo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -18,7 +19,7 @@ public class RemoteRepository {
     public RemoteRepository() {
     }
 
-    public Observable<List<Photo>> getAllPhotosFromUnsplashApi() {
+    public Observable<ArrayList<Photo>> getAllPhotosFromUnsplashApi() {
         return UnSplashApiDataSource.getInstance().getAllPhotos(this.clientId);
     }
 }

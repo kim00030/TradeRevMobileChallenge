@@ -2,7 +2,7 @@ package com.dan.traderevmobilechallenge.remote;
 
 import com.dan.traderevmobilechallenge.model.Photo;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 public interface ServiceApi {
 
     @GET("photos")
-    Observable<List<Photo>> getAllPhotos(
+    Observable<ArrayList<Photo>> getAllPhotos(
             @Query("client_id") String clientId,
             @Query("page") int page,
             @Query("per_page") int perPage);

@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.dan.traderevmobilechallenge.model.Photo;
 import com.dan.traderevmobilechallenge.repository.RemoteRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -26,7 +27,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private static final String TAG = "myDebug";
     private final RemoteRepository remoteRepository;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private final MutableLiveData<List<Photo>> photosLiveData = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<Photo>> photosLiveData = new MutableLiveData<>();
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -41,7 +42,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                 .getAllPhotosFromUnsplashApi()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<List<Photo>>() {
+                .subscribe(new Observer<ArrayList<Photo>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
@@ -49,7 +50,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                     }
 
                     @Override
-                    public void onNext(List<Photo> photos) {
+                    public void onNext(ArrayList<Photo> photos) {
                         Log.d(TAG, "onNext: ");
                         photosLiveData.setValue(photos);
                     }
@@ -66,7 +67,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                 });
     }
 
-    public MutableLiveData<List<Photo>> getPhotosLiveData() {
+    public MutableLiveData<ArrayList<Photo>> getPhotosLiveData() {
         return photosLiveData;
     }
 

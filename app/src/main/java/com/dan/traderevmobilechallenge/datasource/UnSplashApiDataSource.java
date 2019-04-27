@@ -3,6 +3,7 @@ package com.dan.traderevmobilechallenge.datasource;
 import com.dan.traderevmobilechallenge.model.Photo;
 import com.dan.traderevmobilechallenge.remote.RetrofitClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -19,7 +20,7 @@ public class UnSplashApiDataSource {
 
     private UnSplashApiDataSource() { }
 
-    public Observable<List<Photo>> getAllPhotos(final String clientId){
+    public Observable<ArrayList<Photo>> getAllPhotos(final String clientId){
         return RetrofitClient.getInstance().getServiceApi().getAllPhotos(clientId,3,30);
     }
 }

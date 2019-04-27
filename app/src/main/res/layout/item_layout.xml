@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:foreground="?android:attr/selectableItemBackground"
         card_view:cardCornerRadius="5dp">
 
         <LinearLayout
@@ -29,9 +30,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="7dp"
+                android:contentDescription="@string/photoimage"
                 app:photo_url="@{photo.urls.small}"
-                tools:src="@mipmap/ic_launcher"
-                android:contentDescription="@string/photoimage" />
+                tools:src="@mipmap/ic_launcher" />
 
 
             <TextView

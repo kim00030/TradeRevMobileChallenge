@@ -1,12 +1,15 @@
 package com.dan.traderevmobilechallenge.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.dan.traderevmobilechallenge.model.user.User;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Dan Kim on 2019-04-26
  */
-public class Photo {
+public class Photo implements Parcelable {
 
     @SerializedName("id")
     public String id;
@@ -29,6 +32,47 @@ public class Photo {
     @SerializedName("user")
     public User user;
 
+    protected Photo(Parcel in) {
+        id = in.readString();
+        CreatedAt = in.readString();
+        updatedAt = in.readString();
+        width = in.readInt();
+        height = in.readInt();
+        color = in.readString();
+        description = in.readString();
+        altDescription = in.readString();
+        urls = in.readParcelable(Urls.class.getClassLoader());
+        user = in.readParcelable(User.class.getClassLoader());
+    }
 
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+        @Override
+        public Photo createFromParcel(Parcel in) {
+            return new Photo(in);
+        }
 
+        @Override
+        public Photo[] newArray(int size) {
+            return new Photo[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(CreatedAt);
+        dest.writeString(updatedAt);
+        dest.writeInt(width);
+        dest.writeInt(height);
+        dest.writeString(color);
+        dest.writeString(description);
+        dest.writeString(altDescription);
+        dest.writeParcelable(urls, flags);
+        dest.writeParcelable(user, flags);
+    }
 }

@@ -11,7 +11,6 @@ import com.dan.traderevmobilechallenge.model.Photo;
 import com.dan.traderevmobilechallenge.repository.RemoteRepository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

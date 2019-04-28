@@ -7,4 +7,5 @@ public class Constants {
 
     public static final String  KEY_CURRENT_POSITION = "key_currentPosition";
     public static final String  KEY_PHOTOS = "key_photo_list";
+    public static final String  KEY_IMAGE_TRANSITION_NAME = "key_image_transition_name";
 }

@@ -9,11 +9,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.SharedElementCallback;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.dan.traderevmobilechallenge.R;
@@ -35,15 +37,17 @@ public class MainActivity extends AppCompatActivity {
     private StaggeredRecyclerViewAdapter staggeredRecyclerViewAdapter;
     private MainActivityViewModel mainActivityViewModel;
 
-    private ArrayList<ImageView> sharedViews;
-    private int exitPosition;
-    private int enterPosition;
-
+    private static int currentPosition;
+    private static final String KEY_CURRENT_POSITION = "com.google.samples.gridtopager.key.currentPosition";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        if (savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt(KEY_CURRENT_POSITION, 0);
+        }
 
         initUi();
 
@@ -61,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Toolbar
         setSupportActionBar(activityMainBinding.toolBar);
-        staggeredRecyclerViewAdapter = new StaggeredRecyclerViewAdapter(sharedViewListener);
+        staggeredRecyclerViewAdapter = new StaggeredRecyclerViewAdapter();
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager
                 (SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
         activityMainBinding.recyclerView.setAdapter(staggeredRecyclerViewAdapter);
@@ -70,52 +74,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @TargetApi(21)
-    private void setCallback(final int enterPosition) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null && data.hasExtra(Constants.KEY_CURRENT_POSITION)) {
+            currentPosition = data.getIntExtra(Constants.KEY_CURRENT_POSITION, 0);
+            activityMainBinding.recyclerView.scrollToPosition(currentPosition-1);
 
-        this.enterPosition = enterPosition;
-        setExitSharedElementCallback(new SharedElementCallback() {
-            @Override
-            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+        }
 
-                Log.d(TAG, "onMapSharedElements: ");
-
-
-                if (exitPosition != enterPosition &&
-                        names.size() > 0&& exitPosition < sharedViews.size()) {
-                    names.clear();
-                    sharedElements.clear();
-                    View view = sharedViews.get(enterPosition);
-                    names.add(view.getTransitionName());
-                    sharedElements.put(view.getTransitionName(), view);
-
-                }
-                setExitSharedElementCallback((SharedElementCallback) null);
-                sharedViews = null;
-            }
-
-        });
     }
 
     @Override
-    public void onActivityReenter(int resultCode, Intent data) {
-        super.onActivityReenter(resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            Log.d(TAG, "onActivityReenter: ");
-            exitPosition = data.getIntExtra("exit_position", enterPosition);
-        }
-    }
-
-    private OnSharedViewListener sharedViewListener = new OnSharedViewListener() {
-        @Override
-        public void onSharedViewListener(ArrayList<ImageView> views, int enterPosition) {
-            sharedViews = views;
-            setCallback(enterPosition);
-        }
-
-    };
-
-    public interface OnSharedViewListener {
-        void onSharedViewListener(ArrayList<ImageView> views, int enterPosition);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_CURRENT_POSITION, currentPosition);
     }
 }

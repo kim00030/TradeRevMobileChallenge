@@ -1,10 +1,12 @@
 package com.dan.traderevmobilechallenge.view;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +35,7 @@ public class SlideShowActivity extends AppCompatActivity {
     private int adapterPosition;
     private ArrayList<Photo> photos;
     private ActivitySlideShowBinding activitySlideShowBinding;
-    //private CustomSwipeAdapter customSwipeAdapter;
     private PhotoAdapter photoAdapter;
-
     private int current;
 
     @Override
@@ -48,61 +48,32 @@ public class SlideShowActivity extends AppCompatActivity {
 
         activitySlideShowBinding = DataBindingUtil.setContentView(this, R.layout.activity_slide_show);
 
+        //for animation
+        //supportPostponeEnterTransition();
+        Bundle extras = getIntent().getExtras();
+
         adapterPosition = getIntent().getIntExtra(Constants.KEY_CURRENT_POSITION, 0);
         photos = getIntent().getParcelableArrayListExtra(Constants.KEY_PHOTOS);
-        current = getIntent().getIntExtra("current", 0);
 
-        //customSwipeAdapter = new CustomSwipeAdapter(this, photos);
+//        String imageTransitionName ="";
+//        imageTransitionName = extras.getString(Constants.KEY_IMAGE_TRANSITION_NAME);
+
+
+
         photoAdapter = new PhotoAdapter(photos, this);
         activitySlideShowBinding.viewPager.setAdapter(photoAdapter);
-        activitySlideShowBinding.viewPager.setCurrentItem(current);
+        activitySlideShowBinding.viewPager.setCurrentItem(adapterPosition);
 
     }
 
     @Override
-    public void finishAfterTransition() {
+    public void onBackPressed() {
 
-        int pos = activitySlideShowBinding.viewPager.getCurrentItem();
         Intent intent = new Intent();
-        intent.putExtra("exit_position", pos);
-        setResult(RESULT_OK, intent);
-
-        if (current != pos){
-
-            View view = activitySlideShowBinding.viewPager.findViewWithTag(getString(R.string.transition_name,adapterPosition, pos));
-            setSharedElementCallback(view);
-        }
-
-
-        super.finishAfterTransition();
-    }
-
-    @TargetApi(21)
-    private void setSharedElementCallback(final View view) {
-
-        setEnterSharedElementCallback(new SharedElementCallback() {
-            @Override
-            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                names.clear();
-                sharedElements.clear();
-                names.add(view.getTransitionName());
-                sharedElements.put(view.getTransitionName(), view);
-            }
-        });
-    }
-
-
-    @TargetApi(21)
-    private void setStartPostTransition(final View sharedView) {
-
-        sharedView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                sharedView.getViewTreeObserver().removeOnPreDrawListener(this);
-                startPostponedEnterTransition();
-                return false;
-            }
-        });
+        intent.putExtra(Constants.KEY_CURRENT_POSITION, current);
+        setResult(RESULT_OK,intent);
+        finish();
+        super.onBackPressed();
     }
 
     public class PhotoAdapter extends PagerAdapter {
@@ -114,6 +85,7 @@ public class SlideShowActivity extends AppCompatActivity {
         public PhotoAdapter(ArrayList<Photo> photos, Context context) {
             this.photos = photos;
             this.context = context;
+
         }
 
         @Override
@@ -137,19 +109,9 @@ public class SlideShowActivity extends AppCompatActivity {
             ImageView imageView = view.findViewById(R.id.imageView);
 
             Photo photo = this.photos.get(position);
+            current = position;
 
             Picasso.get().load(photo.urls.regular).into(imageView);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                String name = container.getContext()
-                        .getString(R.string.transition_name, adapterPosition, position);
-                imageView.setTransitionName(name);
-                imageView.setTag(name);
-                if (position == current){
-                    setStartPostTransition(imageView);
-                }
-
-            }
 
             container.addView(view);
             return view;

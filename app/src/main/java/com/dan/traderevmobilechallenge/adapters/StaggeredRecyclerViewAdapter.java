@@ -12,6 +12,10 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dan.traderevmobilechallenge.R;
@@ -31,12 +35,6 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
     private static final String TAG = "myDebug";
     private ArrayList<Photo> photos;
     private LayoutInflater layoutInflater;
-    private MainActivity.OnSharedViewListener sharedViewListener;
-    public ArrayList<ImageView> photoViews = new ArrayList<>();
-
-    public StaggeredRecyclerViewAdapter(MainActivity.OnSharedViewListener sharedViewListener) {
-        this.sharedViewListener = sharedViewListener;
-    }
 
     @NonNull
     @Override
@@ -54,17 +52,16 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.itemLayoutBinding.ivPhoto.setTag(position);
-        photoViews.add(holder.itemLayoutBinding.ivPhoto);
+        String name = holder.context
+                .getString(R.string.transition_name, position,position);
+        ViewCompat.setTransitionName(holder.itemLayoutBinding.ivPhoto,name);
 
         holder.bind(this.photos.get(position));
     }
 
     public void setPhotos(ArrayList<Photo> photos) {
+
         this.photos = photos;
-        if (photoViews == null){
-            photoViews = new ArrayList<>();
-        }
         notifyDataSetChanged();
     }
 
@@ -94,19 +91,23 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
             intent.putExtra(Constants.KEY_CURRENT_POSITION, getAdapterPosition());
             intent.putParcelableArrayListExtra(Constants.KEY_PHOTOS, photos);
 
-            Log.d(TAG, "onClick: ");
-            intent.putExtra("current", getAdapterPosition());
-
-            int i = (int) v.getTag();
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                String name = v.getContext()
 //                        .getString(R.string.transition_name, getAdapterPosition(), getAdapterPosition());
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((AppCompatActivity) context), v, v.getTransitionName());
+//                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((AppCompatActivity) context), v, v.getTransitionName());
+//
+//                ((AppCompatActivity) context).startActivityForResult(intent, 0, options.toBundle());
+//                sharedViewListener.onSharedViewListener(photoViews, getAdapterPosition());
 
-                ((AppCompatActivity) context).startActivityForResult(intent, 0, options.toBundle());
-                sharedViewListener.onSharedViewListener(photoViews, getAdapterPosition());
 
+                intent.putExtra(Constants.KEY_IMAGE_TRANSITION_NAME, ViewCompat.getTransitionName(itemLayoutBinding.ivPhoto));
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        ((AppCompatActivity)context),
+                        itemLayoutBinding.ivPhoto,
+                        ViewCompat.getTransitionName(itemLayoutBinding.ivPhoto)
+                );
+
+                ((AppCompatActivity)context).startActivityForResult(intent,0);
 
             } else {
                 ((AppCompatActivity) context).startActivity(intent);
@@ -116,18 +117,6 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
 
         void bind(Photo photo) {
 
-            for (int i = 0; i<photos.size() && i<photoViews.size();i++){
-
-                photoViews.get(i).setTag(i);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-                    String name = this.context.getString(R.string.transition_name, getAdapterPosition(), i);
-
-                    photoViews.get(i).setTransitionName(name);
-
-                }
-            }
 
             this.itemLayoutBinding.setPhoto(photo);
         }

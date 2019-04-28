@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 public class SlideShowActivity extends AppCompatActivity {
 
+    public static final int REQ_START_SLIDE_PHOTO = 100;
     private int current;
 
     @Override

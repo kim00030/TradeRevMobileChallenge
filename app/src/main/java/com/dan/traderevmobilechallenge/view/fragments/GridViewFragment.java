@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -23,7 +24,7 @@ import java.util.Objects;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GridFragment extends Fragment {
+public class GridViewFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private StaggeredRecyclerViewAdapter staggeredRecyclerViewAdapter;
@@ -35,9 +36,11 @@ public class GridFragment extends Fragment {
 
         staggeredRecyclerViewAdapter = new StaggeredRecyclerViewAdapter();
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager
-                (SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
+                (SPAN_COUNT, LinearLayoutManager.VERTICAL);
 
         recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_grid, container, false);
+        // To avoid item moving around
+        recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(staggeredRecyclerViewAdapter);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setHasFixedSize(true);
@@ -76,5 +79,15 @@ public class GridFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void updateCurrentPosition(int currentPosition) {
+
+        try {
+            //noinspection ConstantConditions
+            recyclerView.getLayoutManager().scrollToPosition(currentPosition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

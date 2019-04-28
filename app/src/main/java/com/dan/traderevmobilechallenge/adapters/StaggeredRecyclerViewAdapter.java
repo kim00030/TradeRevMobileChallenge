@@ -76,7 +76,7 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
             intent.putExtra(Constants.KEY_CURRENT_POSITION, getAdapterPosition());
             intent.putParcelableArrayListExtra(Constants.KEY_PHOTOS, photos);
 
-            ((AppCompatActivity) context).startActivityForResult(intent, 0);
+            ((AppCompatActivity) context).startActivityForResult(intent, SlideShowActivity.REQ_START_SLIDE_PHOTO);
 
         }
 

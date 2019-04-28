@@ -1,21 +1,16 @@
 package com.dan.traderevmobilechallenge.view;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.SharedElementCallback;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -26,16 +21,9 @@ import com.dan.traderevmobilechallenge.model.Photo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class SlideShowActivity extends AppCompatActivity {
 
-
-    private int adapterPosition;
-    private ArrayList<Photo> photos;
-    private ActivitySlideShowBinding activitySlideShowBinding;
-    private PhotoAdapter photoAdapter;
     private int current;
 
     @Override
@@ -46,21 +34,12 @@ public class SlideShowActivity extends AppCompatActivity {
             postponeEnterTransition();
         }
 
-        activitySlideShowBinding = DataBindingUtil.setContentView(this, R.layout.activity_slide_show);
+        ActivitySlideShowBinding activitySlideShowBinding = DataBindingUtil.setContentView(this, R.layout.activity_slide_show);
 
-        //for animation
-        //supportPostponeEnterTransition();
-        Bundle extras = getIntent().getExtras();
+        int adapterPosition = getIntent().getIntExtra(Constants.KEY_CURRENT_POSITION, 0);
+        ArrayList<Photo> photos = getIntent().getParcelableArrayListExtra(Constants.KEY_PHOTOS);
 
-        adapterPosition = getIntent().getIntExtra(Constants.KEY_CURRENT_POSITION, 0);
-        photos = getIntent().getParcelableArrayListExtra(Constants.KEY_PHOTOS);
-
-//        String imageTransitionName ="";
-//        imageTransitionName = extras.getString(Constants.KEY_IMAGE_TRANSITION_NAME);
-
-
-
-        photoAdapter = new PhotoAdapter(photos, this);
+        PhotoAdapter photoAdapter = new PhotoAdapter(photos, this);
         activitySlideShowBinding.viewPager.setAdapter(photoAdapter);
         activitySlideShowBinding.viewPager.setCurrentItem(adapterPosition);
 
@@ -71,18 +50,18 @@ public class SlideShowActivity extends AppCompatActivity {
 
         Intent intent = new Intent();
         intent.putExtra(Constants.KEY_CURRENT_POSITION, current);
-        setResult(RESULT_OK,intent);
+        setResult(RESULT_OK, intent);
         finish();
         super.onBackPressed();
     }
 
-    public class PhotoAdapter extends PagerAdapter {
+    class PhotoAdapter extends PagerAdapter {
 
-        private ArrayList<Photo> photos;
-        private Context context;
+        private final ArrayList<Photo> photos;
+        private final Context context;
         private LayoutInflater layoutInflater;
 
-        public PhotoAdapter(ArrayList<Photo> photos, Context context) {
+        PhotoAdapter(ArrayList<Photo> photos, Context context) {
             this.photos = photos;
             this.context = context;
 
@@ -95,7 +74,7 @@ public class SlideShowActivity extends AppCompatActivity {
 
         @Override
         public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-            return view == ((View) object);
+            return view == object;
         }
 
         @NonNull

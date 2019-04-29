@@ -5,4 +5,5 @@
     <string name="unknown">Unknown</string>
     <!--Photo info showing in full screen -->
     <string name="photo_info">Author: %1$s\nCreated At: %2$s\nDescription: %3$s\nLocation: %4$s</string>
+    <string name="full_screen_image">full screen image</string>
 </resources>

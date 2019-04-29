@@ -76,6 +76,7 @@ public class SlideShowActivity extends AppCompatActivity {
                     String photoInfo = StringUtil.formatPhotoData(photos.get(position));
                     activitySlideShowBinding.tvPhotoInfo.setText(photoInfo);
                 });
+                current = position;
             }
 
             @Override
@@ -163,7 +164,8 @@ public class SlideShowActivity extends AppCompatActivity {
             ImageView imageView = view.findViewById(R.id.imageView);
             // Get current photo data viewing
             Photo photo = this.photos.get(position);
-            current = position;
+            // TODO: 2019-04-29 commented tempory for testing
+            //current = position;
             // load current photo
             Picasso.get().load(photo.urls.regular).into(imageView);
 

@@ -80,6 +80,7 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
         public void onClick(View v) {
             // when photo item clicks
             Intent intent = new Intent(context, SlideShowActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent.putExtra(Constants.KEY_CURRENT_POSITION, getAdapterPosition());
             intent.putParcelableArrayListExtra(Constants.KEY_PHOTOS, photos);
 

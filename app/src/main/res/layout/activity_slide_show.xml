@@ -40,17 +40,18 @@
 
             <TextView
                 android:id="@+id/tv_photo_info"
-                android:layout_width="377dp"
-                android:layout_height="84dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tv_photo_info_height"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="e have done in previous examples."
-                android:textColor="@android:color/white"
+                android:paddingStart="8dp"
+                android:textSize="@dimen/photo_info_font"
+                android:textColor="@color/dark_orange"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.555"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.817" />

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="eye_icon">30dp</dimen>
+    <dimen name="photo_info_font">14sp</dimen>
+    <dimen name="tv_photo_info_height">100dp</dimen>
 </resources>

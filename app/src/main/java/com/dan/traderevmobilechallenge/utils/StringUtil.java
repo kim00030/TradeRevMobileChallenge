@@ -2,6 +2,7 @@ package com.dan.traderevmobilechallenge.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.dan.traderevmobilechallenge.R;
 import com.dan.traderevmobilechallenge.application.CustomApp;
@@ -47,13 +48,16 @@ public class StringUtil {
         } else {
             formattedCreatedAt = createdAt;
         }
-
+        // parse description. possible to get null
         String description = photo.description != null ? photo.description : context.getString(R.string.unknown);
-        if (Objects.equals(description, context.getString(R.string.unknown)) && photo.altDescription != null) {
-            description = photo.altDescription;
-        } else {
-            description = context.getString(R.string.unknown);
+        // If description is null try getting alt-description. if it's also null, then showing "unknown"
+        if (description.equals(context.getString(R.string.unknown))){
+
+            if (photo.alt_description != null ){
+                description = photo.alt_description;
+            }
         }
+
         String location = photo.user.location != null ? photo.user.location : context.getString(R.string.unknown);
 
         return String.format(context.getString(R.string.photo_info), author,formattedCreatedAt,description,location);

@@ -29,6 +29,6 @@ public class UnSplashApiDataSource {
      * {@link com.dan.traderevmobilechallenge.viewmodel.MainActivityViewModel}
      */
     public Observable<ArrayList<Photo>> getAllPhotos(final String clientId){
-        return RetrofitClient.getInstance().getServiceApi().getAllPhotos(clientId,3,30);
+        return RetrofitClient.getInstance().getServiceApi().getAllPhotos(clientId,1,30);
     }
 }

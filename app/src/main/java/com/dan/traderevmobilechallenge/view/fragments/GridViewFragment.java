@@ -50,7 +50,7 @@ public class GridViewFragment extends Fragment {
         MainActivityViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class);
         // Observe photo data state and update it to UI
         viewModel.getPhotosLiveData().observe(getViewLifecycleOwner(), photos -> staggeredRecyclerViewAdapter.setPhotos(photos));
-        // Inflate the layout for this fragment
+
         return fragmentGridBinding.recyclerView;
     }
 

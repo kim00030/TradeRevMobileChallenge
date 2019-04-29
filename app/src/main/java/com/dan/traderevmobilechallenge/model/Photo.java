@@ -28,7 +28,7 @@ public class Photo implements Parcelable {
     @SerializedName("description")
     public String description;
     @SerializedName("alt_description")
-    public String altDescription;
+    public String alt_description;
     @SerializedName("urls")
     public Urls urls;
     @SerializedName("user")
@@ -42,7 +42,7 @@ public class Photo implements Parcelable {
         height = in.readInt();
         color = in.readString();
         description = in.readString();
-        altDescription = in.readString();
+        alt_description = in.readString();
         urls = in.readParcelable(Urls.class.getClassLoader());
         user = in.readParcelable(User.class.getClassLoader());
     }
@@ -73,7 +73,7 @@ public class Photo implements Parcelable {
         dest.writeInt(height);
         dest.writeString(color);
         dest.writeString(description);
-        dest.writeString(altDescription);
+        dest.writeString(alt_description);
         dest.writeParcelable(urls, flags);
         dest.writeParcelable(user, flags);
     }

@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Callback from full screen
      * @param requestCode code sent to full screen activity {@link SlideShowActivity} from this activity
-     * @param resultCode  code sent from {@link SlideShowActivity}
-     * @param data data send from {@link SlideShowActivity}
+     * @param resultCode  code sent back from {@link SlideShowActivity}
+     * @param data data sent from {@link SlideShowActivity}
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

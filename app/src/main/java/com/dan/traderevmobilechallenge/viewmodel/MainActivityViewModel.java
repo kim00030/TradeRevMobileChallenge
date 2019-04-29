@@ -21,10 +21,10 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * ViewModel of {@link com.dan.traderevmobilechallenge.view.MainActivity}
  * It's being used by {@link com.dan.traderevmobilechallenge.view.fragments.GridViewFragment}
- * that is attached in the MainActivity.
+ * that is attached to the MainActivity.
  *
- * It gets data sent by unsplash API server and make it as observable live data
- * pass the consumer, GridViewFragment. GridViewFragment will be observe it
+ * It gets data sent by unsplash API server and make it as observable live data, then
+ * GridViewFragment will be observing it
  *
  * Created by Dan Kim on 2019-04-26
  */

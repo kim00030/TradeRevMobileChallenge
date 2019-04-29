@@ -15,7 +15,8 @@ import io.reactivex.Observable;
  * Created by Dan Kim on 2019-04-26
  */
 public class RemoteRepository {
-
+    // Client ID is defined in BuildConfig for security purpose
+    // it's stored in the BuildConfig while compilation time
     private final String clientId = BuildConfig.clientId;
 
     public RemoteRepository() {

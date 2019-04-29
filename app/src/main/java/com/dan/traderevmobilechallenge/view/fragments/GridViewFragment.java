@@ -22,7 +22,8 @@ import com.dan.traderevmobilechallenge.viewmodel.MainActivityViewModel;
 import java.util.Objects;
 
 /**
- * A simple {@link Fragment} subclass.
+ *  This fragment class to utilize Grid view for showing photos
+ *  using Staggered layout
  */
 public class GridViewFragment extends Fragment {
 
@@ -35,7 +36,7 @@ public class GridViewFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         fragmentGridBinding = FragmentGridBinding.inflate(inflater);
-
+        // Instantiate view adapter for recycler view
         staggeredRecyclerViewAdapter = new StaggeredRecyclerViewAdapter();
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager
                 (SPAN_COUNT, LinearLayoutManager.VERTICAL);

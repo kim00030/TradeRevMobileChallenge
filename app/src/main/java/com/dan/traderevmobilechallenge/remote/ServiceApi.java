@@ -9,6 +9,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /**
+ * Client API to get data from unsplash api server
+ *
  * Created by Dan Kim on 2019-04-26
  */
 public interface ServiceApi {

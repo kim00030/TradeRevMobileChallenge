@@ -6,6 +6,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
+ * Http client to communicate with unsplash api server
+ *
  * Created by Dan Kim on 2019-04-26
  */
 public class RetrofitClient {

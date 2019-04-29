@@ -19,6 +19,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
+ * ViewModel of {@link com.dan.traderevmobilechallenge.view.MainActivity}
+ * It's being used by {@link com.dan.traderevmobilechallenge.view.fragments.GridViewFragment}
+ * that is attached in the MainActivity.
+ *
+ * It gets data sent by unsplash API server and make it as observable live data
+ * pass the consumer, GridViewFragment. GridViewFragment will be observe it
+ *
  * Created by Dan Kim on 2019-04-26
  */
 public class MainActivityViewModel extends AndroidViewModel {
@@ -30,11 +37,14 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
-
+        //Instantiate Repository
         remoteRepository = new RemoteRepository();
         getData();
     }
 
+    /**
+     * Method to get Data from unsplash API server
+     */
     private void getData() {
 
         remoteRepository
@@ -44,24 +54,22 @@ public class MainActivityViewModel extends AndroidViewModel {
                 .subscribe(new Observer<ArrayList<Photo>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                         compositeDisposable.add(d);
                     }
 
                     @Override
                     public void onNext(ArrayList<Photo> photos) {
-                        Log.d(TAG, "onNext: ");
+                        // set list of photos into livedata so GridView will be updating
+                        // its UIS with the data
                         photosLiveData.setValue(photos);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, "onError: ");
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.d(TAG, "onComplete: ");
                     }
                 });
     }

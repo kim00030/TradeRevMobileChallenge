@@ -10,6 +10,8 @@ import java.util.List;
 import io.reactivex.Observable;
 
 /**
+ * Repository layer class to manage data source
+ *
  * Created by Dan Kim on 2019-04-26
  */
 public class RemoteRepository {
@@ -19,6 +21,10 @@ public class RemoteRepository {
     public RemoteRepository() {
     }
 
+    /**
+     * Method to get photos
+     * @return Observable that holds list of photos from unsplash API server
+     */
     public Observable<ArrayList<Photo>> getAllPhotosFromUnsplashApi() {
         return UnSplashApiDataSource.getInstance().getAllPhotos(this.clientId);
     }

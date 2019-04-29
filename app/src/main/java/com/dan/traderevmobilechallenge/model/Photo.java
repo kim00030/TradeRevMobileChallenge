@@ -7,6 +7,8 @@ import com.dan.traderevmobilechallenge.model.user.User;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ * This Data map class for photo info received from server
+ *
  * Created by Dan Kim on 2019-04-26
  */
 public class Photo implements Parcelable {

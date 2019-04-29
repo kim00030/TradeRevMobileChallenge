@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ * Data Map for JSON object for Profile
+ *
  * Created by Dan Kim on 2019-04-26
  */
 public class ProfileImage implements Parcelable {

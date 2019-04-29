@@ -18,6 +18,8 @@ import com.dan.traderevmobilechallenge.view.SlideShowActivity;
 import java.util.ArrayList;
 
 /**
+ * This is view adapter, associated with recycler view for showing photos
+ *
  * Created by Dan Kim on 2019-04-26
  */
 public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<StaggeredRecyclerViewAdapter.ViewHolder> {
@@ -32,7 +34,7 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
         if (layoutInflater == null) {
             layoutInflater = LayoutInflater.from(parent.getContext());
         }
-
+        // Inflate views being used by DataBinding object
         ItemLayoutBinding itemLayoutBinding = ItemLayoutBinding.inflate(layoutInflater, parent, false);
 
         return new ViewHolder(itemLayoutBinding);
@@ -44,6 +46,10 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
         holder.bind(this.photos.get(position));
     }
 
+    /**
+     * setter to set list of photo data sent from server
+     * @param photos list of photo data
+     */
     public void setPhotos(ArrayList<Photo> photos) {
 
         this.photos = photos;
@@ -72,6 +78,7 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
 
         @Override
         public void onClick(View v) {
+            // when photo item clicks
             Intent intent = new Intent(context, SlideShowActivity.class);
             intent.putExtra(Constants.KEY_CURRENT_POSITION, getAdapterPosition());
             intent.putParcelableArrayListExtra(Constants.KEY_PHOTOS, photos);
@@ -81,7 +88,7 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<Staggered
         }
 
         void bind(Photo photo) {
-
+            // bind current selected photo object to page xml
             this.itemLayoutBinding.ivPhoto.setTransitionName(photo.urls.regular);
             this.itemLayoutBinding.setPhoto(photo);
         }

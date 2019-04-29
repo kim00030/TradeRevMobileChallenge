@@ -45,8 +45,9 @@ public class GridViewFragment extends Fragment {
         fragmentGridBinding.recyclerView.setAdapter(staggeredRecyclerViewAdapter);
         fragmentGridBinding.recyclerView.setLayoutManager(staggeredGridLayoutManager);
         fragmentGridBinding.recyclerView.setHasFixedSize(true);
-
+        //Get ViewModel
         MainActivityViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class);
+        // Observe photo data state and update it to UI
         viewModel.getPhotosLiveData().observe(getViewLifecycleOwner(), photos -> staggeredRecyclerViewAdapter.setPhotos(photos));
         // Inflate the layout for this fragment
         return fragmentGridBinding.recyclerView;
@@ -82,6 +83,10 @@ public class GridViewFragment extends Fragment {
         });
     }
 
+    /**
+     * Update RecyclerView with current position
+     * @param currentPosition current position of selected item or item viewed at ViewPager
+     */
     public void updateCurrentPosition(int currentPosition) {
 
         try {

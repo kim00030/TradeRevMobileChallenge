@@ -14,7 +14,7 @@ public class Photo implements Parcelable {
     @SerializedName("id")
     public String id;
     @SerializedName("created_at")
-    public String CreatedAt;
+    public String createdAt;
     @SerializedName("updated_at")
     public String updatedAt;
     @SerializedName("width")
@@ -34,7 +34,7 @@ public class Photo implements Parcelable {
 
     protected Photo(Parcel in) {
         id = in.readString();
-        CreatedAt = in.readString();
+        createdAt = in.readString();
         updatedAt = in.readString();
         width = in.readInt();
         height = in.readInt();
@@ -65,7 +65,7 @@ public class Photo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
-        dest.writeString(CreatedAt);
+        dest.writeString(createdAt);
         dest.writeString(updatedAt);
         dest.writeInt(width);
         dest.writeInt(height);

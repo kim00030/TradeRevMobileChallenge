@@ -1,24 +1,26 @@
 package com.dan.traderevmobilechallenge.view.fragments;
 
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.SharedElementCallback;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
-
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.SharedElementCallback;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.dan.traderevmobilechallenge.R;
 import com.dan.traderevmobilechallenge.adapters.ImagePagerAdapter;
 import com.dan.traderevmobilechallenge.databinding.FragmentPagerBinding;
 import com.dan.traderevmobilechallenge.model.Photo;
+import com.dan.traderevmobilechallenge.utils.StringUtil;
 import com.dan.traderevmobilechallenge.view.MainActivity;
 import com.dan.traderevmobilechallenge.viewmodel.MainActivityViewModel;
 
@@ -28,19 +30,22 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * This is fragment utilize full screen view to show selected photo in grid view page{@link GridViewFragment}
+ * This fragment utilizes full screen view to show selected photo in grid view page{@link GridViewFragment}
  */
 public class FullImagePagerFragment extends Fragment {
 
     private FragmentPagerBinding fragmentPagerBinding;
+    private boolean toggleClick = false;
+    private ArrayList<Photo> photos;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         //MainActivity's ViewModel
         MainActivityViewModel mainActivityViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class);
         // Get photo list data from ViewModel
-        ArrayList<Photo> photos = mainActivityViewModel.getPhotosLiveData().getValue();
+        photos = mainActivityViewModel.getPhotosLiveData().getValue();
         // Inflate by DataBinding object
         fragmentPagerBinding = FragmentPagerBinding.inflate(inflater);
 
@@ -61,13 +66,53 @@ public class FullImagePagerFragment extends Fragment {
         if (savedInstanceState == null) {
             postponeEnterTransition();
         }
-
+        initFloatButton();
+        showPhotoInfo();
         return fragmentPagerBinding.getRoot();
-
     }
 
     /**
-     * Method to prepare shared elements transition from the one with same transition name
+     * Method to show photo info for current page
+     */
+    private void showPhotoInfo() {
+
+        fragmentPagerBinding.viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // set photo info showing in full screen page
+                fragmentPagerBinding.tvPhotoInfo.setText(StringUtil.formatPhotoData(photos.get(position)));
+            }
+        });
+    }
+
+    /**
+     * Initialize floating button that controls showing/hiding photo info
+     */
+    private void initFloatButton() {
+
+        //Animation with TextField for showing photo info
+        Objects.requireNonNull(getActivity()).runOnUiThread(() -> YoYo.with(Techniques.Tada)
+                .duration(700)
+                .repeat(1)
+                .playOn(fragmentPagerBinding.tvPhotoInfo));
+        // when floating button clicks on toggle , show on/off the photo info
+        fragmentPagerBinding.fbBtn.setOnClickListener(v -> getActivity().runOnUiThread(() -> {
+
+            toggleClick = !toggleClick;
+
+            if (toggleClick) {
+                fragmentPagerBinding.fbBtn.setImageResource(R.drawable.eye_outline);
+                fragmentPagerBinding.tvPhotoInfo.setVisibility(View.INVISIBLE);
+            } else {
+                fragmentPagerBinding.tvPhotoInfo.setVisibility(View.VISIBLE);
+                fragmentPagerBinding.fbBtn.setImageResource(R.drawable.eye_off_outline);
+            }
+        }));
+    }
+
+    /**
+     * Method to prepare shared elements transition from the one with same transition name in
+     * GridView{@link GridViewFragment}
      */
     private void prepareSharedElementTransition() {
         Transition transition =
@@ -97,4 +142,21 @@ public class FullImagePagerFragment extends Fragment {
                 });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Hide toolbar
+        if (getActivity() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // show toolbar for Activity
+        if (getActivity() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        }
+    }
 }

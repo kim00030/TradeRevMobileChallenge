@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.dan.traderevmobilechallenge.R;
+import com.dan.traderevmobilechallenge.application.CustomApp;
 import com.dan.traderevmobilechallenge.databinding.ImageCardBinding;
 import com.dan.traderevmobilechallenge.model.Photo;
 import com.dan.traderevmobilechallenge.view.MainActivity;
@@ -29,6 +30,9 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
+ * This is adapter associated with RecyclerView
+ * It shows photo data in Grid style
+ *
  * Created by Dan Kim on 2019-04-30
  */
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolder> {
@@ -39,7 +43,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
     private LayoutInflater layoutInflater;
 
     /**
-     * A listener that is attached to all ViewHolders to handle image loading events and clicks.
+     * A listener that is attached to all ViewHolders to handle photo loading events and clicks.
      */
     private interface ViewHolderListener {
 
@@ -48,7 +52,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
     }
 
     /**
-     * Constructs a new grid adapter for the given {@link Fragment}.
+     * Constructs a new grid adapter for the given {@link com.dan.traderevmobilechallenge.view.fragments.GridViewFragment}.
      */
     public GridAdapter(Fragment fragment) {
         this.requestManager = Glide.with(fragment);
@@ -89,11 +93,18 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
         return this.photos == null ? 0 : this.photos.size();
     }
 
+    /**
+     *  {@link ViewHolderListener} implementation
+     */
     private static class ViewHolderListenerImpl implements ViewHolderListener {
 
         private final Fragment fragment;
         private final AtomicBoolean enterTransitionStarted;
 
+        /**
+         * Construct with passing a given Fragment
+         * @param fragment {@link com.dan.traderevmobilechallenge.view.fragments.GridViewFragment}
+         */
         ViewHolderListenerImpl(Fragment fragment) {
             this.fragment = fragment;
             this.enterTransitionStarted = new AtomicBoolean();
@@ -121,6 +132,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
             // instead of fading out with the rest to prevent an overlapping animation of fade and move).
             ((TransitionSet) Objects.requireNonNull(fragment.getExitTransition())).excludeTarget(view, true);
 
+            // Shared element transition starts
             ImageView transitioningView = view.findViewById(R.id.iv_photo);
             Objects.requireNonNull(fragment.getFragmentManager())
                     .beginTransaction()
@@ -132,7 +144,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
                     .commit();
         }
     }
-
 
     /**
      * ViewHolder for the grid's images.
@@ -166,7 +177,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
             setImage(photo);
             //data bind to xml
             imageCardBinding.setPhoto(photo);
-            imageCardBinding.ivPhoto.setTransitionName("photo" + photo.id);
+            imageCardBinding.ivPhoto.setTransitionName(CustomApp.getContext().getString(R.string.photo) + photo.id);
         }
 
         void setImage(Photo photo) {
@@ -195,8 +206,5 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
             // Let the listener start the FullImagePagerFragment.
             viewHolderListener.onItemClicked(view, getAdapterPosition());
         }
-
-
     }
-
 }

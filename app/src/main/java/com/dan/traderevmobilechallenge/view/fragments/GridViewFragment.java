@@ -1,6 +1,5 @@
 package com.dan.traderevmobilechallenge.view.fragments;
 
-
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -45,10 +44,11 @@ public class GridViewFragment extends Fragment {
         recyclerView.setAdapter(gridAdapter);
         //Get ViewModel
         MainActivityViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class);
-
+        // Observe Data from ViewModel
         viewModel.getPhotosLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Photo>>() {
             @Override
             public void onChanged(ArrayList<Photo> photos) {
+                // show data
                 gridAdapter.setPhotos(photos);
 
             }

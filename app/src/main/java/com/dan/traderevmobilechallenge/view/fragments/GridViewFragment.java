@@ -2,21 +2,29 @@ package com.dan.traderevmobilechallenge.view.fragments;
 
 
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.SharedElementCallback;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.dan.traderevmobilechallenge.adapters.StaggeredRecyclerViewAdapter;
-import com.dan.traderevmobilechallenge.databinding.FragmentGridBinding;
+
+import com.dan.traderevmobilechallenge.R;
+import com.dan.traderevmobilechallenge.adapters.GridAdapter;
+import com.dan.traderevmobilechallenge.model.Photo;
+import com.dan.traderevmobilechallenge.view.MainActivity;
 import com.dan.traderevmobilechallenge.viewmodel.MainActivityViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -25,67 +33,89 @@ import java.util.Objects;
  */
 public class GridViewFragment extends Fragment {
 
-    private StaggeredRecyclerViewAdapter staggeredRecyclerViewAdapter;
-    private static final int SPAN_COUNT = 2;
-    private FragmentGridBinding fragmentGridBinding;
+    private RecyclerView recyclerView;
+    private GridAdapter gridAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        fragmentGridBinding = FragmentGridBinding.inflate(inflater);
-        // Instantiate view adapter for recycler view
-        staggeredRecyclerViewAdapter = new StaggeredRecyclerViewAdapter();
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager
-                (SPAN_COUNT, LinearLayoutManager.VERTICAL);
-
-        // To avoid item moving around
-        fragmentGridBinding.recyclerView.setItemAnimator(null);
-        fragmentGridBinding.recyclerView.setAdapter(staggeredRecyclerViewAdapter);
-        fragmentGridBinding.recyclerView.setLayoutManager(staggeredGridLayoutManager);
-        fragmentGridBinding.recyclerView.setHasFixedSize(true);
+        recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_grid, container, false);
+        gridAdapter = new GridAdapter(this);
+        recyclerView.setAdapter(gridAdapter);
         //Get ViewModel
         MainActivityViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class);
-        // Observe photo data state and update it to UI
-        viewModel.getPhotosLiveData().observe(getViewLifecycleOwner(), photos -> staggeredRecyclerViewAdapter.setPhotos(photos));
 
-        return fragmentGridBinding.recyclerView;
+        viewModel.getPhotosLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Photo>>() {
+            @Override
+            public void onChanged(ArrayList<Photo> photos) {
+                gridAdapter.setPhotos(photos);
+
+            }
+        });
+
+        prepareTransitions();
+        postponeEnterTransition();
+
+        return recyclerView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        scrollToPosition();
 
     }
 
-    /**
-     * Update RecyclerView with current position
-     *
-     * @param currentPosition current position of selected item or item viewed at ViewPager
-     */
-    public void updateCurrentPosition(int currentPosition) {
+    private void scrollToPosition() {
+        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v,
+                                       int left,
+                                       int top,
+                                       int right,
+                                       int bottom,
+                                       int oldLeft,
+                                       int oldTop,
+                                       int oldRight,
+                                       int oldBottom) {
+                recyclerView.removeOnLayoutChangeListener(this);
 
-        try {
-
-            StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) fragmentGridBinding.recyclerView.getLayoutManager();
-
-            int[] into = new int[SPAN_COUNT];// 2 is span count.
-
-            int firstVisibleItem = Objects.requireNonNull(layoutManager).findFirstVisibleItemPositions(into)[0];
-            // TESTING CODES
-//            int findLastCompletedVisibleItem = layoutManager.findLastCompletelyVisibleItemPositions(into)[0];
-//            int lastCompletedVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPositions(into)[0];
-//            int lastVisibleItemPosition = layoutManager.findLastVisibleItemPositions(into)[0];
-
-            if (currentPosition < firstVisibleItem) {
-                currentPosition = currentPosition - (firstVisibleItem - currentPosition) < 0 ? 0 : currentPosition - (firstVisibleItem - currentPosition);
+                final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                View viewAtPosition = Objects.requireNonNull(layoutManager).findViewByPosition(MainActivity.currentPosition);
+                // Scroll to position if the view for the current position is null (not currently part of
+                // layout manager children), or it's not completely visible.
+                if (viewAtPosition == null || layoutManager
+                        .isViewPartiallyVisible(viewAtPosition, false, true)) {
+                    recyclerView.post(() -> layoutManager.scrollToPosition(MainActivity.currentPosition));
+                }
             }
+        });
+    }
 
-            Objects.requireNonNull(fragmentGridBinding.recyclerView.getLayoutManager())
-                    .scrollToPosition(currentPosition);
+    private void prepareTransitions() {
+        setExitTransition(TransitionInflater.from(getContext())
+                .inflateTransition(R.transition.grid_exit_transition));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // A similar mapping is set at the ImagePagerFragment with a setEnterSharedElementCallback.
+        setExitSharedElementCallback(
+                new SharedElementCallback() {
+                    @Override
+                    public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                        // Locate the ViewHolder for the clicked position.
+
+                        RecyclerView.ViewHolder selectedViewHolder = recyclerView
+                                .findViewHolderForAdapterPosition(MainActivity.currentPosition);
+                        if (selectedViewHolder == null || selectedViewHolder.itemView == null) {
+                            return;
+                        }
+
+                        // Map the first shared element name to the child ImageView.
+                        sharedElements
+                                .put(names.get(0), selectedViewHolder.itemView.findViewById(R.id.iv_photo));
+
+                    }
+                });
+
     }
 }

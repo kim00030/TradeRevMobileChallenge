@@ -44,7 +44,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
     private interface ViewHolderListener {
 
         void onLoadCompleted(int adapterPosition);
-
         void onItemClicked(View view, int adapterPosition);
     }
 
@@ -77,14 +76,12 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
         // Inflate views being used by DataBinding object
         ImageCardBinding imageCardBinding = ImageCardBinding.inflate(layoutInflater, parent, false);
 
-
         return new ImageViewHolder(imageCardBinding, requestManager, viewHolderListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        Photo photo = photos.get(position);
-        holder.onBind(photo);
+        holder.onBind(photos.get(position));
     }
 
     @Override
@@ -143,7 +140,6 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
     static class ImageViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener {
 
-        private final ImageView photoImage;
         private final RequestManager requestManager;
         private final ViewHolderListener viewHolderListener;
         private final ImageCardBinding imageCardBinding;
@@ -151,7 +147,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
         ImageViewHolder(ImageCardBinding imageCardBinding, RequestManager requestManager,
                         ViewHolderListener viewHolderListener) {
             super(imageCardBinding.getRoot());
-            this.photoImage = imageCardBinding.ivPhoto;
+
             this.requestManager = requestManager;
             this.viewHolderListener = viewHolderListener;
             this.imageCardBinding = imageCardBinding;
@@ -166,30 +162,31 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
          * later.
          */
         void onBind(Photo photo) {
-            int adapterPosition = getAdapterPosition();
-            setImage(photo, adapterPosition);
+
+            setImage(photo);
+            //data bind to xml
             imageCardBinding.setPhoto(photo);
-            photoImage.setTransitionName("photo" + photo.id);
+            imageCardBinding.ivPhoto.setTransitionName("photo" + photo.id);
         }
 
-        void setImage(Photo photo, final int adapterPosition) {
-            // Load the photoImage with Glide to prevent OOM error when the photoImage drawables are very large.
+        void setImage(Photo photo) {
+            // Load the photoImage with Glide
             requestManager
                     .load(photo.urls.small)
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            viewHolderListener.onLoadCompleted(adapterPosition);
+                            viewHolderListener.onLoadCompleted(getAdapterPosition());
                             return false;
                         }
 
                         @Override
                         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            viewHolderListener.onLoadCompleted(adapterPosition);
+                            viewHolderListener.onLoadCompleted(getAdapterPosition());
                             return false;
                         }
                     })
-                    .into(photoImage);
+                    .into(imageCardBinding.ivPhoto);
 
         }
 

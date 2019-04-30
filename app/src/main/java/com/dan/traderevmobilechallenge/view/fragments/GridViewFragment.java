@@ -29,7 +29,7 @@ import java.util.Objects;
 
 /**
  * This fragment class to utilize Grid view for showing photos
- * using Staggered layout
+ * using Grid layout
  */
 public class GridViewFragment extends Fragment {
 
@@ -97,7 +97,7 @@ public class GridViewFragment extends Fragment {
         setExitTransition(TransitionInflater.from(getContext())
                 .inflateTransition(R.transition.grid_exit_transition));
 
-        // A similar mapping is set at the ImagePagerFragment with a setEnterSharedElementCallback.
+        // A similar mapping is set at the FullImagePagerFragment with a setEnterSharedElementCallback.
         setExitSharedElementCallback(
                 new SharedElementCallback() {
                     @Override

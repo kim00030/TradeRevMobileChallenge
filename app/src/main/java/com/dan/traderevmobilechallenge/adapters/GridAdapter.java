@@ -22,7 +22,7 @@ import com.dan.traderevmobilechallenge.R;
 import com.dan.traderevmobilechallenge.databinding.ImageCardBinding;
 import com.dan.traderevmobilechallenge.model.Photo;
 import com.dan.traderevmobilechallenge.view.MainActivity;
-import com.dan.traderevmobilechallenge.view.fragments.ImagePagerFragment;
+import com.dan.traderevmobilechallenge.view.fragments.FullImagePagerFragment;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -126,7 +126,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
                     .beginTransaction()
                     .setReorderingAllowed(true) // Optimize for shared element transition
                     .addSharedElement(transitioningView, transitioningView.getTransitionName())
-                    .replace(R.id.fragment_container, new ImagePagerFragment(), ImagePagerFragment.class
+                    .replace(R.id.fragment_container, new FullImagePagerFragment(), FullImagePagerFragment.class
                             .getSimpleName())
                     .addToBackStack(null)
                     .commit();
@@ -192,7 +192,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
 
         @Override
         public void onClick(View view) {
-            // Let the listener start the ImagePagerFragment.
+            // Let the listener start the FullImagePagerFragment.
             viewHolderListener.onItemClicked(view, getAdapterPosition());
         }
 

@@ -1,4 +1,4 @@
-package com.dan.traderevmobilechallenge.datasource;
+package com.dan.traderevmobilechallenge.model.datasource;
 
 import com.dan.traderevmobilechallenge.model.Photo;
 import com.dan.traderevmobilechallenge.remote.RetrofitClient;

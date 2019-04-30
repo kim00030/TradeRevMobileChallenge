@@ -1,11 +1,10 @@
 package com.dan.traderevmobilechallenge.repository;
 
 import com.dan.traderevmobilechallenge.BuildConfig;
-import com.dan.traderevmobilechallenge.datasource.UnSplashApiDataSource;
+import com.dan.traderevmobilechallenge.model.datasource.UnSplashApiDataSource;
 import com.dan.traderevmobilechallenge.model.Photo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Observable;
 

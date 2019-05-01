@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,7 +27,6 @@ import com.dan.traderevmobilechallenge.model.Photo;
 import com.dan.traderevmobilechallenge.view.MainActivity;
 import com.dan.traderevmobilechallenge.view.fragments.FullImagePagerFragment;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,11 +36,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * Created by Dan Kim on 2019-04-30
  */
-public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolder> {
+public class GridAdapter extends ListAdapter<Photo,GridAdapter.ImageViewHolder> {
 
     private final RequestManager requestManager;
     private final ViewHolderListener viewHolderListener;
-    private ArrayList<Photo> photos;
     private LayoutInflater layoutInflater;
 
     /**
@@ -51,23 +51,26 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
         void onItemClicked(View view, int adapterPosition);
     }
 
+    private static final DiffUtil.ItemCallback<Photo> DIFF_CALLBACK = new DiffUtil.ItemCallback<Photo>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Photo oldItem, @NonNull Photo newItem) {
+            return oldItem.id.equals(newItem.id);
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Photo oldItem, @NonNull Photo newItem) {
+            return oldItem.id.equals(newItem.id) && oldItem.user.name.equals(newItem.user.name)
+                    && oldItem.createdAt.equals(newItem.createdAt);
+        }
+    };
+
     /**
      * Constructs a new grid adapter for the given {@link com.dan.traderevmobilechallenge.view.fragments.GridViewFragment}.
      */
     public GridAdapter(Fragment fragment) {
+        super(DIFF_CALLBACK);
         this.requestManager = Glide.with(fragment);
         this.viewHolderListener = new ViewHolderListenerImpl(fragment);
-    }
-
-    /**
-     * setter to set list of photo data sent from server
-     *
-     * @param photos list of photo data
-     */
-    public void setPhotos(ArrayList<Photo> photos) {
-
-        this.photos = photos;
-        notifyDataSetChanged();
     }
 
     @NonNull
@@ -85,12 +88,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        holder.onBind(photos.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return this.photos == null ? 0 : this.photos.size();
+        holder.onBind(getItem(position));
     }
 
     /**

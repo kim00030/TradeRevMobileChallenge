@@ -49,7 +49,7 @@ public class GridViewFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<Photo> photos) {
                 // show data
-                gridAdapter.setPhotos(photos);
+                gridAdapter.submitList(photos);
 
             }
         });
@@ -67,6 +67,9 @@ public class GridViewFragment extends Fragment {
 
     }
 
+    /**
+     * To Scroll to position
+     */
     private void scrollToPosition() {
         recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -93,6 +96,9 @@ public class GridViewFragment extends Fragment {
         });
     }
 
+    /**
+     * To Prepare shared elements transition
+     */
     private void prepareTransitions() {
         setExitTransition(TransitionInflater.from(getContext())
                 .inflateTransition(R.transition.grid_exit_transition));

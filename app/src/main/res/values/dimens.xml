@@ -6,5 +6,6 @@
     <dimen name="image_width_in_grid_layout">200dp</dimen>
     <dimen name="image_height_in_grid_layout">200dp</dimen>
     <dimen name="image_margin_in_grid_layout">7dp</dimen>
+    <dimen name="text_in_loading_dialog">20sp</dimen>
     <integer name="grid_span_count">2</integer>
 </resources>

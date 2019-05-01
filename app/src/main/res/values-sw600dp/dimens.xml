@@ -2,4 +2,5 @@
 <resources>
     <dimen name="photo_info_font">20sp</dimen>
     <dimen name="tv_photo_info_height">200dp</dimen>
+    <dimen name="text_in_loading_dialog">40sp</dimen>
 </resources>

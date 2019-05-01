@@ -10,18 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.SharedElementCallback;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.dan.traderevmobilechallenge.R;
 import com.dan.traderevmobilechallenge.adapters.GridAdapter;
-import com.dan.traderevmobilechallenge.model.Photo;
+import com.dan.traderevmobilechallenge.databinding.FragmentGridBinding;
+import com.dan.traderevmobilechallenge.view.LoadingDialog;
 import com.dan.traderevmobilechallenge.view.MainActivity;
 import com.dan.traderevmobilechallenge.viewmodel.MainActivityViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,46 +31,70 @@ import java.util.Objects;
  */
 public class GridViewFragment extends Fragment {
 
-    private RecyclerView recyclerView;
     private GridAdapter gridAdapter;
+    private FragmentGridBinding fragmentGridBinding;
+    private LoadingDialog loadingDialog;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_grid, container, false);
+        fragmentGridBinding = FragmentGridBinding.inflate(inflater);
+
         gridAdapter = new GridAdapter(this);
-        recyclerView.setAdapter(gridAdapter);
+        fragmentGridBinding.recyclerView.setAdapter(gridAdapter);
+
+        showLoadingDialog(savedInstanceState);
         //Get ViewModel
         MainActivityViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity())).get(MainActivityViewModel.class);
-        // Observe Data from ViewModel
-        viewModel.getPhotosLiveData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Photo>>() {
-            @Override
-            public void onChanged(ArrayList<Photo> photos) {
-                // show data
-                gridAdapter.submitList(photos);
 
+        // Observe Data from ViewModel
+        viewModel.getPhotosLiveData().observe(getViewLifecycleOwner(), photos -> {
+            // show data
+            gridAdapter.submitList(photos);
+            //loading dialog will be dismissing
+            if (loadingDialog != null){
+                loadingDialog.dismiss();
+                loadingDialog = null;
+            }else{
+                loadingDialog = (LoadingDialog) getChildFragmentManager().findFragmentByTag(LoadingDialog.class.getSimpleName());
+                if (loadingDialog != null) {
+                    loadingDialog.dismiss();
+                    loadingDialog = null;
+                }
             }
         });
 
         prepareTransitions();
         postponeEnterTransition();
 
-        return recyclerView;
+        return fragmentGridBinding.getRoot();
+    }
+
+    /**
+     * Show Loading Dialog while fetching data
+     * @param savedInstanceState Bundle sent by Android system
+     */
+    private void showLoadingDialog(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            loadingDialog = new LoadingDialog();
+            loadingDialog.setCancelable(false);
+            loadingDialog.show(getChildFragmentManager(), LoadingDialog.class.getSimpleName());
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         scrollToPosition();
-
     }
 
     /**
-     * To Scroll to position
+     * To Scroll to position the view for the current position is null (not currently part of
+     * layout manager children), or it's not completely visible.
      */
     private void scrollToPosition() {
-        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        fragmentGridBinding.recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v,
                                        int left,
@@ -82,15 +105,15 @@ public class GridViewFragment extends Fragment {
                                        int oldTop,
                                        int oldRight,
                                        int oldBottom) {
-                recyclerView.removeOnLayoutChangeListener(this);
+                fragmentGridBinding.recyclerView.removeOnLayoutChangeListener(this);
 
-                final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                final RecyclerView.LayoutManager layoutManager = fragmentGridBinding.recyclerView.getLayoutManager();
                 View viewAtPosition = Objects.requireNonNull(layoutManager).findViewByPosition(MainActivity.currentPosition);
                 // Scroll to position if the view for the current position is null (not currently part of
                 // layout manager children), or it's not completely visible.
                 if (viewAtPosition == null || layoutManager
                         .isViewPartiallyVisible(viewAtPosition, false, true)) {
-                    recyclerView.post(() -> layoutManager.scrollToPosition(MainActivity.currentPosition));
+                    fragmentGridBinding.recyclerView.post(() -> layoutManager.scrollToPosition(MainActivity.currentPosition));
                 }
             }
         });
@@ -110,9 +133,9 @@ public class GridViewFragment extends Fragment {
                     public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
                         // Locate the ViewHolder for the clicked position.
 
-                        RecyclerView.ViewHolder selectedViewHolder = recyclerView
+                        RecyclerView.ViewHolder selectedViewHolder = fragmentGridBinding.recyclerView
                                 .findViewHolderForAdapterPosition(MainActivity.currentPosition);
-                        if (selectedViewHolder == null || selectedViewHolder.itemView == null) {
+                        if (selectedViewHolder == null) {
                             return;
                         }
 
@@ -122,6 +145,5 @@ public class GridViewFragment extends Fragment {
 
                     }
                 });
-
     }
 }

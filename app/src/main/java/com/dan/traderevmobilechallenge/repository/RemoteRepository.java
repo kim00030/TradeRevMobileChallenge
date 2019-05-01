@@ -25,7 +25,7 @@ public class RemoteRepository {
      * Method to get photos
      * @return Observable that holds list of photos from unsplash API server
      */
-    public Observable<ArrayList<Photo>> getAllPhotosFromUnsplashApi() {
-        return UnSplashApiDataSource.getInstance().getAllPhotos(this.clientId);
+    public Observable<ArrayList<Photo>> getAllPhotosFromUnsplashApi(int pageNo, int maxNumDataOnPage) {
+        return UnSplashApiDataSource.getInstance().getAllPhotos(this.clientId,pageNo,maxNumDataOnPage);
     }
 }

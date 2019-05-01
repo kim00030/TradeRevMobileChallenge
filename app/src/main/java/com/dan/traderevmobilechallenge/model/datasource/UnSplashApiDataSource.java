@@ -28,7 +28,7 @@ public class UnSplashApiDataSource {
      * @return Observable object that holds list of photos. It is observed by
      * {@link com.dan.traderevmobilechallenge.viewmodel.MainActivityViewModel}
      */
-    public Observable<ArrayList<Photo>> getAllPhotos(final String clientId){
-        return RetrofitClient.getInstance().getServiceApi().getAllPhotos(clientId,1,30);
+    public Observable<ArrayList<Photo>> getAllPhotos(final String clientId, int pageNo, int maxNumDataOnPage){
+        return RetrofitClient.getInstance().getServiceApi().getAllPhotos(clientId,pageNo,maxNumDataOnPage);
     }
 }

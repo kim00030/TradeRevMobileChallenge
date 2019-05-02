@@ -7,5 +7,6 @@
     <string name="full_screen_image">full screen image</string>
     <string name="photo">photo</string>
     <string name="loading_please_wait">Loading… Please wait</string>
+    <string name="no_internet">No internet</string>
 
 </resources>

@@ -1,12 +1,18 @@
 package com.dan.traderevmobilechallenge.viewmodel;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.dan.traderevmobilechallenge.components.NetworkStateChangeReceiver;
 import com.dan.traderevmobilechallenge.model.Photo;
 import com.dan.traderevmobilechallenge.repository.RemoteRepository;
 
@@ -21,6 +27,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import static com.dan.traderevmobilechallenge.components.NetworkStateChangeReceiver.IS_NETWORK_AVAILABLE;
 
 /**
  * ViewModel of {@link com.dan.traderevmobilechallenge.view.MainActivity}
@@ -40,12 +47,44 @@ public class MainActivityViewModel extends AndroidViewModel {
     private final RemoteRepository remoteRepository;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final MutableLiveData<ArrayList<Photo>> photosLiveData = new MutableLiveData<>();
+    private final  MutableLiveData<Boolean> networkStateLiveData = new MutableLiveData<>();
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
+
+        initNetWork();
         //Instantiate Repository
         remoteRepository = new RemoteRepository();
         getData();
+    }
+
+    /**
+     * Method to initialize to receive broadcast message from application -level
+     */
+    private void initNetWork() {
+
+        IntentFilter intentFilter = new IntentFilter(NetworkStateChangeReceiver.NETWORK_AVAILABLE_ACTION);
+        LocalBroadcastManager.getInstance(getApplication()).registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                boolean isNetworkAvailable = intent.getBooleanExtra(IS_NETWORK_AVAILABLE, false);
+                // if receiving network issue
+                if (!isNetworkAvailable){
+                    Log.d(TAG, "No NET WORK: ");
+                    //Because of this set, MainActivity will be notifying the issue
+                    networkStateLiveData.setValue(false);
+                }else{
+
+                    networkStateLiveData.setValue(true);
+                    // Now network is backed up, check if no photos have not received yet
+                    // call api to get them
+                    if(photosLiveData.getValue() == null){
+                        getData();
+                    }
+                }
+
+            }
+        }, intentFilter);
     }
 
     /**
@@ -107,6 +146,10 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public MutableLiveData<ArrayList<Photo>> getPhotosLiveData() {
         return photosLiveData;
+    }
+
+    public MutableLiveData<Boolean> getNetworkStateLiveData() {
+        return networkStateLiveData;
     }
 
     @Override

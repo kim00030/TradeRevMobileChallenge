@@ -52,7 +52,11 @@ public class MainActivityViewModel extends AndroidViewModel {
      * Method to get Data from unsplash API server
      */
     private void getData() {
-
+        // Add Observables that holds data from unsplash API on each page
+        // Apparently up to 10 pages . I set to receive 30 photos on each page
+        // By my observation, there is no single api to get all pages
+        // Also, I checked manually , how many pages are available for me and up to 59 pages
+        // are available and tested and ok, but wasteful, so I set only up tp 10 page I want to get
         List<Observable<ArrayList<Photo>>> photoObservableList = new ArrayList<>();
         for (int i = 1; i <= PARAM_NUMBER_OF_PAGE; i++) {
 

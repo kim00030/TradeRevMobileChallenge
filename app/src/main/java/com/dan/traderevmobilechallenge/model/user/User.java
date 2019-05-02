@@ -10,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * Created by Dan Kim on 2019-04-26
  */
+@SuppressWarnings("ALL")
 public class User implements Parcelable {
 
     @SerializedName("id")
@@ -26,8 +27,6 @@ public class User implements Parcelable {
     public String lastName;
     @SerializedName("location")
     public String location;
-    @SerializedName("profile_image")
-    public ProfileImage profileImage;
     @SerializedName("instagram_username")
     public String instagramUserName;
     @SerializedName("totalCollections")

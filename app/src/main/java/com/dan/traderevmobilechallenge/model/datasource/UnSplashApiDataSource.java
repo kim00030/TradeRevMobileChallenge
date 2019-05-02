@@ -12,6 +12,7 @@ import io.reactivex.Observable;
  *
  * Created by Dan Kim on 2019-04-26
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class UnSplashApiDataSource {
     private static final UnSplashApiDataSource ourInstance = new UnSplashApiDataSource();
 
@@ -24,7 +25,7 @@ public class UnSplashApiDataSource {
     /**
      * Method to get photos from Unsplash api server
      *
-     * @param clientId Clinet ID as parameter required by unsplash APi call
+     * @param clientId client ID as parameter required by unsplash APi call
      * @return Observable object that holds list of photos. It is observed by
      * {@link com.dan.traderevmobilechallenge.viewmodel.MainActivityViewModel}
      */

@@ -1,5 +1,6 @@
 package com.dan.traderevmobilechallenge.view;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -30,7 +31,7 @@ public class LoadingDialog extends AppCompatDialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.loading_dialog, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.loading_dialog, null);
         builder.setView(view);
 
         return builder.create();

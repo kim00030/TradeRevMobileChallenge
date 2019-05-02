@@ -6,6 +6,6 @@
     <string name="photo_info">Author: %1$s\nCreated At: %2$s\nDescription: %3$s\nLocation: %4$s</string>
     <string name="full_screen_image">full screen image</string>
     <string name="photo">photo</string>
-    <string name="loading_please_wait">Loading... Please wait</string>
+    <string name="loading_please_wait">Loading… Please wait</string>
 
 </resources>

@@ -25,6 +25,7 @@ import com.dan.traderevmobilechallenge.model.Photo;
  *  A Fragment that instantiates a full screen page showing each photo
  *  Calls from {@link com.dan.traderevmobilechallenge.adapters.ImagePagerAdapter}
  */
+@SuppressWarnings("ALL")
 public class ImageFragment extends Fragment {
 
     private static final String KEY_PHOTO = "com.dan.traderevmobilechallenge.view.fragments.key.photo";
@@ -51,6 +52,7 @@ public class ImageFragment extends Fragment {
         Glide.with(this)
                 .load(photo.urls.regular)
                 .listener(new RequestListener<Drawable>() {
+                    @SuppressWarnings("ConstantConditions")
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         getParentFragment().startPostponedEnterTransition();

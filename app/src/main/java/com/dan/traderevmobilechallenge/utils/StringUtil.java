@@ -2,7 +2,6 @@ package com.dan.traderevmobilechallenge.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.dan.traderevmobilechallenge.R;
 import com.dan.traderevmobilechallenge.application.CustomApp;
@@ -10,7 +9,6 @@ import com.dan.traderevmobilechallenge.model.Photo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Objects;
 
 /**
  * This is util class to do string-related tasks

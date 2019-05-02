@@ -32,6 +32,7 @@ import java.util.Objects;
 /**
  * This fragment utilizes full screen view to show selected photo in grid view page{@link GridViewFragment}
  */
+@SuppressWarnings("ConstantConditions")
 public class FullImagePagerFragment extends Fragment {
 
     private FragmentPagerBinding fragmentPagerBinding;

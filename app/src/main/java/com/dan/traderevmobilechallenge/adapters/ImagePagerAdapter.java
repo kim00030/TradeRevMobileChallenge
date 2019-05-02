@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by Dan Kim on 2019-04-30
  */
 public class ImagePagerAdapter extends FragmentStatePagerAdapter {
-    private ArrayList<Photo> photos;
+    private final ArrayList<Photo> photos;
 
     public ImagePagerAdapter(Fragment fragment, ArrayList<Photo> photos) {
         super(fragment.getChildFragmentManager());

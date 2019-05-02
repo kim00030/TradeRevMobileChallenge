@@ -155,7 +155,7 @@ public class ExampleInstrumentedTest {
 
         // go 100th position
         int targetToGo = 100;
-        performIdle(4000);
+        performIdle(5000);
         onView(ViewMatchers.withId(R.id.recycler_view))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(targetToGo, scrollTo()));
 

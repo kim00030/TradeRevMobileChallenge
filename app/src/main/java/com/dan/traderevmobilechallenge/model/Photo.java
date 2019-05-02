@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * Created by Dan Kim on 2019-04-26
  */
+@SuppressWarnings({"WeakerAccess", "CanBeFinal"})
 public class Photo implements Parcelable {
 
     @SerializedName("id")

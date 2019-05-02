@@ -39,7 +39,10 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Instrumented test, which will execute on an Android device.
  *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * To run test, you can click errow indicator aligned on each test method for testing separately
+ * or click the indicator aligned on class name for all in one test
+ *
+ * OR click on Run/debug button on main menu with selecting testing app
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {

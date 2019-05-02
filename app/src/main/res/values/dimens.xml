@@ -2,6 +2,7 @@
 <resources>
     <dimen name="eye_icon">30dp</dimen>
     <dimen name="photo_info_font">14sp</dimen>
+    <dimen name="photo_info_font_max">15sp</dimen>
     <dimen name="tv_photo_info_height">240dp</dimen>
     <dimen name="image_width_in_grid_layout">200dp</dimen>
     <dimen name="image_height_in_grid_layout">200dp</dimen>

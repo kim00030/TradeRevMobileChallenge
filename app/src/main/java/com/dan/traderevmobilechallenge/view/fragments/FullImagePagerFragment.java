@@ -81,7 +81,7 @@ public class FullImagePagerFragment extends Fragment {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // set photo info showing in full screen page
-                fragmentPagerBinding.tvPhotoInfo.setText(StringUtil.formatPhotoData(photos.get(position)));
+                fragmentPagerBinding.tvPhotoInfo.setText(StringUtil.INSTANCE.formatPhotoData(photos.get(position)));
             }
         });
     }

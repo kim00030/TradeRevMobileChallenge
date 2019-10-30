@@ -59,4 +59,8 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_CURRENT_POSITION, currentPosition);
     }
+
+    class MyClass {
+
+    }
 }

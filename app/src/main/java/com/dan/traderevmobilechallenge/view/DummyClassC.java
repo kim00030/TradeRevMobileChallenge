@@ -6,4 +6,10 @@ package com.dan.traderevmobilechallenge.view;
 public class DummyClassC {
     public DummyClassC() {
     }
+
+    private String s;
+
+    public DummyClassC(String s) {
+        this.s = s;
+    }
 }

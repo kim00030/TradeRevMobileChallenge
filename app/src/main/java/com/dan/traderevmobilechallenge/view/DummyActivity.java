@@ -13,4 +13,9 @@ public class DummyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dummy);
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
 }

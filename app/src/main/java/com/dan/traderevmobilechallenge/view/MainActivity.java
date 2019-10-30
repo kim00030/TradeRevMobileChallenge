@@ -63,5 +63,6 @@ public class MainActivity extends AppCompatActivity {
     class MyClass {
 
         private String s;
+        private int i = 0;
     }
 }

@@ -60,9 +60,4 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt(KEY_CURRENT_POSITION, currentPosition);
     }
 
-    class MyClass {
-
-        private String s;
-        private int i = 0;
-    }
 }

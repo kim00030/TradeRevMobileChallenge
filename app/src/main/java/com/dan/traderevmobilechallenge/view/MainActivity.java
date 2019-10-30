@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static int currentPosition;
     private static final String KEY_CURRENT_POSITION = "key_current_position";
+    private static final String ABC = "abc";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

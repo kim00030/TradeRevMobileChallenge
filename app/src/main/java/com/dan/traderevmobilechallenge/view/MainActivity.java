@@ -61,4 +61,13 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt(KEY_CURRENT_POSITION, currentPosition);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
 }

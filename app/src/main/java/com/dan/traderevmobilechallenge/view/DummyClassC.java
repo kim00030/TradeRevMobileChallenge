@@ -11,7 +11,9 @@ public class DummyClassC {
 
     public DummyClassC(String s) {
         this.s = s;
-        int i = 1;
+        int i = 1 +3;
         String test = "Test";
+
+        boolean myBoolean = false;
     }
 }

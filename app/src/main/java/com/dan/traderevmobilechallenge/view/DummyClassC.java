@@ -16,4 +16,8 @@ public class DummyClassC {
 
         boolean myBoolean = true;
     }
+
+    private void validationCheck(){
+
+    }
 }

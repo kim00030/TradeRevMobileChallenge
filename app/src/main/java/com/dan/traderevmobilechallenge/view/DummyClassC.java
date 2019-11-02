@@ -12,5 +12,6 @@ public class DummyClassC {
     public DummyClassC(String s) {
         this.s = s;
         int i = 1;
+        String test = "Test";
     }
 }
